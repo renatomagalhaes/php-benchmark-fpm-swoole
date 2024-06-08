@@ -7,5 +7,3 @@ RUN pecl install xdebug && docker-php-ext-enable xdebug
 RUN apt update && apt install -y libpq-dev && docker-php-ext-install pdo_mysql && docker-php-ext-enable pdo_mysql
 
 WORKDIR /app
-
-COPY ../../src /app
