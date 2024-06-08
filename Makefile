@@ -36,4 +36,5 @@ benchmark:
 	docker-compose up wrk --build
 
 benchmark-logs:
+	# Waiting for healthcheck for web container to start...
 	docker-compose logs -f wrk
