@@ -61,20 +61,26 @@ services:
       - poc-network
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 30s
+      interval: 10s
       timeout: 10s
-      retries: 3
+      retries: 5
 
   wrk:
     container_name: "benchmark"
     build:
       context: .
       dockerfile: docker/wrk/Dockerfile
+    restart: no
     networks:
       - poc-network
     depends_on:
       - web
-    restart: no
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://web/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
 networks:
   poc-network:
