@@ -12,7 +12,7 @@ logs:
 install: build composer-install up benchmark-logs
 
 build:
-	docker-compose build --no-cache
+	docker-compose build
 
 composer-install:
 	docker run --rm -itv $(shell pwd)/src:/app -w /app composer:2.7.2 composer install --ignore-platform-reqs
@@ -30,5 +30,4 @@ benchmark:
 	docker-compose up wrk --build
 
 benchmark-logs:
-	sleep 5
 	docker-compose logs -f wrk
