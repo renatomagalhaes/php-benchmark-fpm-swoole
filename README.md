@@ -1,12 +1,12 @@
 # Benchmark PHP-FPM vs PHP Swoole
 
-## Descrição
-Este projeto tem como objetivo gerar um comparativo de benchmark entre o PHP rodando com PHP-FPM e o PHP com Swoole utilizando a biblioteca PHP Runner.
+## Descrição (PT-BR)
+Este projeto tem como objetivo gerar um teste comparativo de benchmark entre o PHP rodando com PHP-FPM e o PHP com Swoole utilizando a biblioteca runtime/swoole.
 
 ## Description
-This project aims to generate a benchmark comparison between PHP running with PHP-FPM and PHP with Swoole using the PHP Runner library.
+This project aims to generate a comparative benchmark test between PHP running with PHP-FPM and PHP with Swoole using the runtime/swoole library.
 
-## Clonar e Instalar
+## Clone and Install
 To clone and install the project, follow these steps:
 
 1. Clone the repository:
@@ -24,29 +24,24 @@ To clone and install the project, follow these steps:
   make install
   ```
 
-4. See the Makefile for more commands.
+## See the Makefile for more commands.
 
-5. Run the benchmark with PHP-FPM and Swoole:
+. Run the benchmark with PHP-FPM and Swoole:
   ```bash
   make benchmark
   ```
 
-6. Run the benchmark with PHP-FPM and Swoole:
+. Run the benchmark with PHP-FPM and Swoole:
   ```bash
   make benchmark-logs
   ```
 
-7. Build the project:
-  ```bash
-  make build
-  ```
-
-8. Start the project:
+. Start the project:
   ```bash
   make up
   ```
 
-9. Stop the project:
+. Stop the project:
   ```bash
   make stop
   ```
