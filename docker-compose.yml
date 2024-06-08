@@ -5,11 +5,14 @@ services:
       dockerfile: docker/php-fpm/Dockerfile
       target: dev
     volumes:
-      - ./src:/app
+      - ./:/app
     environment:
       APP_ENV: dev
     networks:
       - poc-network
+    depends_on:
+      mysql:
+        condition: service_healthy
 
   php-swoole:
     build:
@@ -17,7 +20,7 @@ services:
       dockerfile: docker/swoole/Dockerfile
       target: dev
     volumes:
-      - ./src:/app
+      - ./:/app
     environment:
       APP_ENV: dev
       APP_RUNTIME: "Runtime\\Swoole\\Runtime"
@@ -25,6 +28,9 @@ services:
       SWOOLE_PORT: "8000"
     networks:
       - poc-network
+    depends_on:
+      mysql:
+        condition: service_healthy
 
   web:
     build:
@@ -37,6 +43,27 @@ services:
       - poc-network
     depends_on:
       - php-fpm
+      - php-swoole
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: benchmark
+      MYSQL_USER: user
+      MYSQL_PASSWORD: root
+    restart: always
+    volumes:
+      - ./docker/mysql/initdb:/docker-entrypoint-initdb.d
+    networks:
+      - poc-network
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   wrk:
     container_name: "benchmark"
@@ -46,8 +73,7 @@ services:
     networks:
       - poc-network
     depends_on:
-        - php-fpm
-        - php-swoole
+      - web
     restart: no
 
 networks:
