@@ -1,7 +1,7 @@
 # Benchmark PHP-FPM vs PHP Swoole
 
 ## Descrição (PT-BR)
-Este projeto tem como objetivo gerar um teste comparativo de benchmark entre o PHP rodando com PHP-FPM e o PHP com Swoole utilizando a biblioteca runtime/swoole.
+Este projeto tem como objetivo gerar um teste comparativo de benchmark entre o PHP rodando com PHP-FPM e o PHP com Swoole utilizando a biblioteca [runtime/swoole](https://github.com/php-runtime/swoole).
 
 ## Description
 This project aims to generate a comparative benchmark test between PHP running with PHP-FPM and PHP with Swoole using the runtime/swoole library.
