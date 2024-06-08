@@ -1,7 +1,5 @@
 <?php
 
-namespace App\Swoole;
-
 use Dotenv\Dotenv;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
@@ -30,7 +28,11 @@ return function () {
 
         try {
             // Executa a consulta
-            $users = getUsers($swoole_mysql);
+            $statement = $swoole_mysql->prepare("SELECT `id`, `name`, `email`, `status` FROM users WHERE `status` = 'active' LIMIT 10");
+            if ($statement === false) {
+                throw new \Exception($db->error, $db->errno);
+            }
+            $users = $statement->execute();
 
             // Retorna a resposta
             $response->end(json_encode(['message' => [
@@ -39,19 +41,12 @@ return function () {
             ]]));
         } catch (\Throwable $e) {
             // Lida com erros
+            $response->status(500);
+            $response->header("Content-Type", "application/json");
+            $response->header("X-Error-Message", $e->getMessage());
+            $response->header("X-Error-Code", $e->getCode());
+            $response->header("X-Error-File", $e->getFile());
             $response->end(json_encode(['error' => $e->getMessage()]));
         }
     };
 };
-
-if (!function_exists('getUsers')) {
-    function getUsers(MySQL $db): array
-    {
-        $statement = $db->prepare("SELECT * FROM users WHERE `status` = 'active' LIMIT 10");
-        if ($statement === false) {
-            throw new \Exception($db->error, $db->errno);
-        }
-
-        return $statement->execute();
-    }
-}
