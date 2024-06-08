@@ -1,0 +1,55 @@
+services:
+  php-fpm:
+    build:
+      context: .
+      dockerfile: docker/php-fpm/Dockerfile
+      target: dev
+    volumes:
+      - ./src:/app
+    environment:
+      APP_ENV: dev
+    networks:
+      - poc-network
+
+  php-swoole:
+    build:
+      context: .
+      dockerfile: docker/swoole/Dockerfile
+      target: dev
+    volumes:
+      - ./src:/app
+    environment:
+      APP_ENV: dev
+      APP_RUNTIME: "Runtime\\Swoole\\Runtime"
+      SWOOLE_HOST: "0.0.0.0"
+      SWOOLE_PORT: "8000"
+    networks:
+      - poc-network
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    ports:
+      - "80:80"
+      - "8080:8080"
+    networks:
+      - poc-network
+    depends_on:
+      - php-fpm
+
+  wrk:
+    container_name: "benchmark"
+    build:
+      context: .
+      dockerfile: docker/wrk/Dockerfile
+    networks:
+      - poc-network
+    depends_on:
+        - php-fpm
+        - php-swoole
+    restart: no
+
+networks:
+  poc-network:
+    driver: bridge
